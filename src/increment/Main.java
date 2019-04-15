@@ -9,7 +9,7 @@ public class Main {
 }
 
 /*
-    Thraed1    |    Thread2
+    Thread1    |    Thread2
 -------------------------------
   int tmp = x  |
                |  int tmp = x
