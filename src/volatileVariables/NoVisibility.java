@@ -19,7 +19,6 @@ public class NoVisibility {
         ready = true;
     }
 
-
     /*
     Outcome ?
     - 42 is printed <- lucky!!
