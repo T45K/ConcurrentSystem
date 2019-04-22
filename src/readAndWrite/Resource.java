@@ -1,7 +1,5 @@
 package readAndWrite;
 
-import java.sql.SQLOutput;
-
 public class Resource {
     private Lock mutex = new LockAttempt1();
 
