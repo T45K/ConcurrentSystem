@@ -6,6 +6,7 @@ public class Resource {
     private Lock mutex = new LockAttempt1();
 
     public void access() {
+        mutex.lock();
         try {
             System.out.println("Thread " + Thread.currentThread().getName() + " enters CS");
             Thread.sleep(100);
