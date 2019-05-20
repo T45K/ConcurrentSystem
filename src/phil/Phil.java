@@ -8,6 +8,9 @@ public class Phil extends Thread {
     private static final int NUM_OF_PHILS = 5;
     private final Semaphore left, right;
     private final int id;
+
+    // the number of fork been used
+    // this value is operated atomically
     private static AtomicInteger numOfUsingFork = new AtomicInteger(0);
 
     private Phil(final Semaphore left, final Semaphore right, final int id) {
@@ -21,13 +24,12 @@ public class Phil extends Thread {
             try {
                 Thread.sleep(ThreadLocalRandom.current().nextLong(100, 200));
 
-                // if more than 4 forks are used, taking fork is prohibited to avoid deadlock
+                // if more than 4 forks are been used, taking last fork is prohibited to avoid deadlock
                 while(numOfUsingFork.get() >= 4);
                 right.acquire();
                 System.out.println(id + " got right fork");
                 numOfUsingFork.incrementAndGet();
 
-                while(numOfUsingFork.get() >= 5);
                 left.acquire();
                 System.out.println(id + " got left fork");
                 numOfUsingFork.incrementAndGet();
