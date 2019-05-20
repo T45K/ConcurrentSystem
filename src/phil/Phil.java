@@ -2,11 +2,13 @@ package phil;
 
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class Phil extends Thread {
     private static final int NUM_OF_PHILS = 5;
     private final Semaphore left, right;
     private final int id;
+    private static AtomicInteger numOfUsingFork = new AtomicInteger(0);
 
     private Phil(final Semaphore left, final Semaphore right, final int id) {
         this.left = left;
@@ -18,15 +20,27 @@ public class Phil extends Thread {
         while (true) {
             try {
                 Thread.sleep(ThreadLocalRandom.current().nextLong(100, 200));
+
+                // if more than 4 forks are used, taking fork is prohibited to avoid deadlock
+                while(numOfUsingFork.get() >= 4);
                 right.acquire();
                 System.out.println(id + " got right fork");
+                numOfUsingFork.incrementAndGet();
+
+                while(numOfUsingFork.get() >= 5);
                 left.acquire();
                 System.out.println(id + " got left fork");
+                numOfUsingFork.incrementAndGet();
+
                 Thread.sleep(100);
+
                 right.release();
                 System.out.println(id + " put right fork");
+                numOfUsingFork.decrementAndGet();
+
                 left.release();
                 System.out.println(id + " put left fork");
+                numOfUsingFork.decrementAndGet();
             } catch (final InterruptedException e) {
                 return;
             }
