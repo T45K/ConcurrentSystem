@@ -11,7 +11,7 @@ public class Phil extends Thread {
 
     // the number of fork been used
     // this value is operated atomically
-    private static AtomicInteger numOfUsingFork = new AtomicInteger(0);
+    private static AtomicInteger numOfUsedFork = new AtomicInteger(0);
 
     private Phil(final Semaphore left, final Semaphore right, final int id) {
         this.left = left;
@@ -24,25 +24,25 @@ public class Phil extends Thread {
             try {
                 Thread.sleep(ThreadLocalRandom.current().nextLong(100, 200));
 
-                // if more than 4 forks are been used, taking last fork is prohibited to avoid deadlock
-                while(numOfUsingFork.get() >= 4);
+                // if more than 3 forks are been used, taking last fork is prohibited to avoid deadlock
+                while(numOfUsedFork.get() >= 4);
                 right.acquire();
                 System.out.println(id + " got right fork");
-                numOfUsingFork.incrementAndGet();
+                numOfUsedFork.incrementAndGet();
 
                 left.acquire();
                 System.out.println(id + " got left fork");
-                numOfUsingFork.incrementAndGet();
+                numOfUsedFork.incrementAndGet();
 
                 Thread.sleep(100);
 
                 right.release();
                 System.out.println(id + " put right fork");
-                numOfUsingFork.decrementAndGet();
+                numOfUsedFork.decrementAndGet();
 
                 left.release();
                 System.out.println(id + " put left fork");
-                numOfUsingFork.decrementAndGet();
+                numOfUsedFork.decrementAndGet();
             } catch (final InterruptedException e) {
                 return;
             }
