@@ -25,7 +25,7 @@ public class Phil extends Thread {
                 Thread.sleep(ThreadLocalRandom.current().nextLong(100, 200));
 
                 // if more than 3 forks are been used, taking last fork is prohibited to avoid deadlock
-                while(numOfUsedFork.get() >= 4);
+                while (numOfUsedFork.get() >= NUM_OF_PHILS - 1) ;
                 right.acquire();
                 System.out.println(id + " got right fork");
                 numOfUsedFork.incrementAndGet();
