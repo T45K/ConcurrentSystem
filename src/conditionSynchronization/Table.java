@@ -15,7 +15,13 @@ public class Table {
 
     public synchronized void put(final String cake) throws InterruptedException {
         System.out.println(Thread.currentThread().getName() + " puts " + cake);
+        /*
         while (count >= buffer.length) {
+            wait();
+        }
+         */
+
+        if (count >= buffer.length) {
             wait();
         }
 
@@ -26,9 +32,16 @@ public class Table {
     }
 
     public synchronized String take() throws InterruptedException {
+        /*
         while (count <= 0) {
             wait();
         }
+         */
+
+        if (count <= 0) {
+            wait();
+        }
+
         String cake = buffer[head];
         head = (head + 1) % buffer.length;
         count--;
