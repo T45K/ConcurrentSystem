@@ -6,50 +6,55 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 public class Data1 {
     private final char[] buffer;
-    private final ReadWriteLock rwlock = new ReentrantReadWriteLock(true);
-    private final Lock readlock = rwlock.readLock();
-    private final Lock writelock = rwlock.writeLock();
- 
-    public Data1(int size) {
+    private final ReadWriteLock readWriteLock = new ReentrantReadWriteLock(true);
+    private final Lock readLock = readWriteLock.readLock();
+    private final Lock writeLock = readWriteLock.writeLock();
+
+    public Data1(final int size) {
         this.buffer = new char[size];
         for (int i = 0; i < buffer.length; i++) {
             buffer[i] = '*';
         }
     }
+
     public char[] read() throws InterruptedException {
-        readlock.lock();
+        readLock.lock();
         try {
             return doRead();
         } finally {
-            readlock.unlock();
+            readLock.unlock();
         }
     }
-    public void write(char c) throws InterruptedException {
-        writelock.lock();
+
+    public void write(final char c) throws InterruptedException {
+        writeLock.lock();
         try {
             doWrite(c);
         } finally {
-            writelock.unlock();
+            writeLock.unlock();
         }
     }
+
     private char[] doRead() {
-        char[] newbuf = new char[buffer.length];
+        final char[] newBuffer = new char[buffer.length];
         for (int i = 0; i < buffer.length; i++) {
-            newbuf[i] = buffer[i];
+            newBuffer[i] = buffer[i];
         }
         slowly();
-        return newbuf;
+        return newBuffer;
     }
-    private void doWrite(char c) {
+
+    private void doWrite(final char c) {
         for (int i = 0; i < buffer.length; i++) {
             buffer[i] = c;
             slowly();
         }
     }
+
     private void slowly() {
         try {
             Thread.sleep(50);
-        } catch (InterruptedException e) {
+        } catch (final InterruptedException e) {
         }
     }
 }

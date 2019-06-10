@@ -1,4 +1,5 @@
 package readersWriters;
+
 import java.util.Random;
 
 public class WriterThread extends Thread {
@@ -6,22 +7,25 @@ public class WriterThread extends Thread {
     private final Data2 data;
     private final String filler;
     private int index = 0;
-    public WriterThread(Data2 data, String filler) {
+
+    public WriterThread(final Data2 data, final String filler) {
         this.data = data;
         this.filler = filler;
     }
+
     public void run() {
         try {
             while (true) {
-                char c = nextchar();
+                final char c = nextChar();
                 data.write(c);
                 Thread.sleep(random.nextInt(3000));
             }
-        } catch (InterruptedException e) {
+        } catch (final InterruptedException e) {
         }
     }
-    private char nextchar() {
-        char c = filler.charAt(index);
+
+    private char nextChar() {
+        final char c = filler.charAt(index);
         index++;
         if (index >= filler.length()) {
             index = 0;

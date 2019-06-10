@@ -1,8 +1,8 @@
 package readersWriters;
 
 public class Main {
-    public static void main(String[] args) {
-        Data2 data = new Data2(10);
+    public static void main(final String[] args) {
+        final Data2 data = new Data2(10);
         new ReaderThread(data).start();
         new ReaderThread(data).start();
 

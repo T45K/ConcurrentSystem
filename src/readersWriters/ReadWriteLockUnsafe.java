@@ -1,18 +1,18 @@
 package readersWriters;
 
-public final class RWLockUnsafe implements ReadWriteLock {
-    private int readingReaders = 0; 
-    private int writingWriters = 0; 
+public final class ReadWriteLockUnsafe implements ReadWriteLock {
+    private int readingReaders = 0;
+    private int writingWriters = 0;
 
     public synchronized void acquireRead() throws InterruptedException {
         while (writingWriters > 0) {
             wait();
         }
-        readingReaders++;              
+        readingReaders++;
     }
 
     public synchronized void releaseRead() {
-        readingReaders--;   
+        readingReaders--;
         notifyAll();
     }
 
@@ -20,11 +20,11 @@ public final class RWLockUnsafe implements ReadWriteLock {
         while (writingWriters > 0) {
             wait();
         }
-        writingWriters++; 
+        writingWriters++;
     }
 
     public synchronized void releaseWrite() {
-        writingWriters--;                      
+        writingWriters--;
         notifyAll();
     }
 }
