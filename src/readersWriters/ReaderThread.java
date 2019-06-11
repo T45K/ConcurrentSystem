@@ -10,8 +10,8 @@ public class ReaderThread extends Thread {
     public void run() {
         try {
             while (true) {
-                final char[] readBuffer = data.read();
-                System.out.println(Thread.currentThread().getName() + " reads " + String.valueOf(readBuffer));
+                final char[] buffer = data.read();
+                System.out.println(Thread.currentThread().getName() + " reads " + String.valueOf(buffer));
             }
         } catch (final InterruptedException e) {
         }
