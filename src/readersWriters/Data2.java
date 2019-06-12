@@ -2,10 +2,10 @@ package readersWriters;
 
 public class Data2 {
     private final char[] buffer;
-    private final ReadWriteLock lock = new ReadWriteLockUnsafe();
-    //  private final ReadWriteLock lock = new RWLockSafe();
-    //  private final ReadWriteLock lock = new RWLockWritePriority();
-    //  private final ReadWriteLock lock = new RWLockWriteLive();  
+    //  private final ReadWriteLock lock = new ReadWriteLockUnsafe();
+    //  private final ReadWriteLock lock = new ReadWriteLockSafe();
+    //  private final ReadWriteLock lock = new ReadWriteLockWritePriority();
+    private final ReadWriteLock lock = new ReadWriteLockLive();
 
     public Data2(final int size) {
         this.buffer = new char[size];

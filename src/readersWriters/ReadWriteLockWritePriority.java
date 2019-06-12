@@ -1,12 +1,12 @@
 package readersWriters;
 
-public class ReadWriteLockWriterPriority implements ReadWriteLock {
+public class ReadWriteLockWritePriority implements ReadWriteLock {
     private int readingReaders = 0;
     private int writingWriters = 0;
     private int waitingWriters = 0;
 
     @Override
-    public void acquireRead() throws InterruptedException {
+    public synchronized void acquireRead() throws InterruptedException {
         while (writingWriters > 0 || waitingWriters > 0) {
             wait();
         }
@@ -14,13 +14,13 @@ public class ReadWriteLockWriterPriority implements ReadWriteLock {
     }
 
     @Override
-    public void releaseRead() {
+    public synchronized void releaseRead() {
         readingReaders--;
         notifyAll();
     }
 
     @Override
-    public void acquireWrite() throws InterruptedException {
+    public synchronized void acquireWrite() throws InterruptedException {
         waitingWriters++;
         while (readingReaders > 0 || writingWriters > 0) {
             wait();
@@ -30,8 +30,8 @@ public class ReadWriteLockWriterPriority implements ReadWriteLock {
     }
 
     @Override
-    public void releaseWrite() {
-        writingWriters++;
+    public synchronized void releaseWrite() {
+        writingWriters--;
         notifyAll();
     }
 }
